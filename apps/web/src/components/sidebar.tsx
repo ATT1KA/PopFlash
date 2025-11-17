@@ -14,7 +14,9 @@ export const Sidebar = () => {
   return (
     <aside className="flex h-screen w-72 flex-col border-r border-white/5 bg-panel/90 backdrop-blur-xl">
       <div className="px-6 pt-8">
-        <div className="text-2xl font-heading font-semibold tracking-tight text-primary">PopFlash</div>
+        <div className="text-2xl font-heading font-semibold tracking-tight text-primary">
+          PopFlash
+        </div>
         <p className="mt-1 text-sm text-textSecondary">Counter-Strike Asset Terminal</p>
       </div>
 
