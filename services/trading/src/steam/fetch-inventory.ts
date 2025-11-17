@@ -52,7 +52,8 @@ export const fetchSteamInventory = async (steamId: string): Promise<AggregatedIn
       continue;
     }
 
-    const rarity = description.tags.find((tag) => rarityCategories.has(tag.category))?.localized_tag_name;
+    const rarity = description.tags.find((tag) => rarityCategories.has(tag.category))
+      ?.localized_tag_name;
     const existing = aggregation.get(description.market_hash_name);
     const amount = Number.parseInt(asset.amount, 10) || 1;
 

@@ -1,4 +1,5 @@
-import { tradeSchema, tradeStatusSchema, tradeTypeSchema } from '@popflash/shared';
+import type { Trade } from '@popflash/shared';
+import { tradeSchema, tradeStatusSchema } from '@popflash/shared';
 
 import { createTrade, findTradeById, listTradesForUser } from '../repositories/trade-repository.js';
 import { HttpError } from '../utils/http-error.js';
@@ -6,7 +7,7 @@ import { HttpError } from '../utils/http-error.js';
 const PLATFORM_FEE_RATE = 0.05;
 const TAX_RATE = 0.0725;
 
-const normalizeTrade = (trade: any) =>
+const normalizeTrade = (trade: (Trade & { _id?: string }) | (Trade & { id?: string })) =>
   tradeSchema.parse({
     id: trade._id ?? trade.id,
     buyerUserId: trade.buyerUserId,
@@ -26,7 +27,7 @@ interface CreateTradeInput {
   buyerUserId: string;
   sellerUserId: string;
   assets: Array<{ assetId: string; priceUsd: number }>;
-  type: (typeof tradeTypeSchema)._type;
+  type: 'buy' | 'sell';
 }
 
 export const createTradeDraft = async (input: CreateTradeInput) => {
@@ -52,7 +53,7 @@ export const createTradeDraft = async (input: CreateTradeInput) => {
     taxesUsd,
     totalUsd,
     type: input.type,
-    status: tradeStatusSchema.enum.awaiting_payment,
+    status: tradeStatusSchema.enum['awaiting_payment'],
   });
 
   return normalizeTrade(trade);

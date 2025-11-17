@@ -1,3 +1,12 @@
+const path = require('path');
+
+const projectGlobs = [
+  path.resolve(__dirname, '../../tsconfig.json'),
+  path.resolve(__dirname, '../../packages/*/tsconfig.json'),
+  path.resolve(__dirname, '../../services/*/tsconfig.json'),
+  path.resolve(__dirname, '../../apps/*/tsconfig.json'),
+];
+
 module.exports = {
   root: true,
   env: {
@@ -6,7 +15,8 @@ module.exports = {
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: ['./tsconfig.json'],
+    project: projectGlobs,
+    tsconfigRootDir: path.resolve(__dirname, '../../'),
   },
   plugins: ['@typescript-eslint', 'import', 'prettier'],
   extends: [
@@ -35,7 +45,8 @@ module.exports = {
   settings: {
     'import/resolver': {
       typescript: {
-        project: ['./tsconfig.json'],
+        project: projectGlobs,
+        alwaysTryTypes: true,
       },
     },
   },

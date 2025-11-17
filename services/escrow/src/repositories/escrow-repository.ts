@@ -9,7 +9,8 @@ export const createEscrow = (input: {
   milestones: Array<{ name: string; completedAt?: Date }>;
 }) => EscrowModel.create(input);
 
-export const findEscrowByTradeId = (tradeId: string) => EscrowModel.findOne({ tradeId }).lean().exec();
+export const findEscrowByTradeId = (tradeId: string) =>
+  EscrowModel.findOne({ tradeId }).lean().exec();
 
 export const updateEscrowStatus = (tradeId: string, status: string) =>
   EscrowModel.findOneAndUpdate(
@@ -18,7 +19,10 @@ export const updateEscrowStatus = (tradeId: string, status: string) =>
     { new: true, lean: true },
   ).exec();
 
-export const updateEscrowMilestones = (tradeId: string, milestones: Array<{ name: string; completedAt?: Date }>) =>
+export const updateEscrowMilestones = (
+  tradeId: string,
+  milestones: Array<{ name: string; completedAt?: Date }>,
+) =>
   EscrowModel.findOneAndUpdate(
     { tradeId },
     { $set: { milestones, updatedAt: new Date() } },

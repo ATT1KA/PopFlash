@@ -53,6 +53,10 @@ export const validateSteamTicket = async (ticket: string) => {
       throw error;
     }
 
-    throw new HttpError(401, 'Steam validation failed', error instanceof Error ? error.message : error);
+    throw new HttpError(
+      401,
+      'Steam validation failed',
+      error instanceof Error ? error.message : error,
+    );
   }
 };

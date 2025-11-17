@@ -1,8 +1,8 @@
 import type { Express } from 'express';
 
 import { authRouter } from './auth.js';
-import { portfolioRouter } from './portfolio.js';
 import { escrowRouter } from './escrow.js';
+import { portfolioRouter } from './portfolio.js';
 import { tradesRouter } from './trades.js';
 
 export const registerRoutes = (app: Express) => {

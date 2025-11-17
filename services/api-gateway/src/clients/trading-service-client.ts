@@ -1,6 +1,8 @@
-import { createHttpClient, get, post } from './http-client.js';
-import { config } from '../config.js';
 import type { Asset, Trade } from '@popflash/shared';
+
+import { config } from '../config.js';
+
+import { createHttpClient, get, post } from './http-client.js';
 
 interface PortfolioHolding {
   assetId: string;
@@ -45,16 +47,11 @@ export const syncSteamInventory = (userId: string, authHeader?: string) =>
   );
 
 export const createTrade = (payload: CreateTradePayload, authHeader?: string) =>
-  post<Trade>(
-    client,
-    '/v1/trades',
-    payload,
-    {
-      headers: {
-        Authorization: authHeader,
-      },
+  post<Trade>(client, '/v1/trades', payload, {
+    headers: {
+      Authorization: authHeader,
     },
-  );
+  });
 
 export const fetchTrade = (tradeId: string, authHeader?: string) =>
   get<Trade>(client, `/v1/trades/${tradeId}`, {

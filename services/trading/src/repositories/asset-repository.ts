@@ -40,4 +40,6 @@ export const upsertAssetByMarketHash = async ({
 };
 
 export const findAssetsByIds = (ids: string[]) =>
-  AssetModel.find({ _id: { $in: ids } }).lean().exec();
+  AssetModel.find({ _id: { $in: ids } })
+    .lean()
+    .exec();

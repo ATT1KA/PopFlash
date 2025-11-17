@@ -1,11 +1,13 @@
+import type { PortfolioDocument } from '@popflash/database';
+import type { Asset } from '@popflash/shared';
 import { assetSchema } from '@popflash/shared';
 
-import { HttpError } from '../utils/http-error.js';
-import { findUserById } from '../repositories/user-repository.js';
-import { findPortfolioByUserId, upsertPortfolio } from '../repositories/portfolio-repository.js';
 import { findAssetsByIds, upsertAssetByMarketHash } from '../repositories/asset-repository.js';
+import { findPortfolioByUserId, upsertPortfolio } from '../repositories/portfolio-repository.js';
+import { findUserById } from '../repositories/user-repository.js';
 import { fetchSteamInventory } from '../steam/fetch-inventory.js';
 import { fetchSteamPrice } from '../steam/fetch-price.js';
+import { HttpError } from '../utils/http-error.js';
 
 const rarityMap: Record<string, string> = {
   'consumer grade': 'consumer',
@@ -92,32 +94,38 @@ export const syncPortfolioFromSteam = async (userId: string) => {
   return enrichPortfolio(portfolio);
 };
 
-const enrichPortfolio = async (portfolio: any) => {
-  const assetIds = portfolio.holdings.map((holding: any) => holding.assetId);
+type PortfolioRecord = PortfolioDocument & { _id?: string };
+type PortfolioHoldingRecord = PortfolioDocument['holdings'][number];
+
+const enrichPortfolio = async (portfolio: PortfolioRecord) => {
+  const assetIds = portfolio.holdings.map((holding) => holding.assetId);
 
   const assets = assetIds.length > 0 ? await findAssetsByIds(assetIds) : [];
   const assetMap = new Map(
-    assets.map((asset) => [asset._id, assetSchema.parse({
-      id: asset._id,
-      name: asset.name,
-      description: asset.description ?? undefined,
-      steamMarketHashName: asset.steamMarketHashName,
-      iconUrl: asset.iconUrl ?? undefined,
-      rarity: asset.rarity,
-      suggestedPriceUsd: asset.suggestedPriceUsd,
-      suggestedPriceUpdatedAt: asset.suggestedPriceUpdatedAt,
-      ownerUserId: asset.ownerUserId ?? null,
-    })]),
+    assets.map((asset) => [
+      asset._id,
+      assetSchema.parse({
+        id: asset._id,
+        name: asset.name,
+        description: asset.description ?? undefined,
+        steamMarketHashName: asset.steamMarketHashName,
+        iconUrl: asset.iconUrl ?? undefined,
+        rarity: asset.rarity,
+        suggestedPriceUsd: asset.suggestedPriceUsd,
+        suggestedPriceUpdatedAt: asset.suggestedPriceUpdatedAt,
+        ownerUserId: asset.ownerUserId ?? null,
+      }),
+    ]),
   );
 
   return {
     userId: portfolio.userId,
     totalValueUsd: portfolio.totalValueUsd,
-    holdings: portfolio.holdings.map((holding: any) => ({
+    holdings: portfolio.holdings.map((holding: PortfolioHoldingRecord) => ({
       assetId: holding.assetId,
       quantity: holding.quantity,
       valueUsd: holding.valueUsd,
-      asset: assetMap.get(holding.assetId),
+      asset: assetMap.get(holding.assetId) as Asset | undefined,
     })),
     lastSyncedAt: portfolio.lastSyncedAt,
     updatedAt: portfolio.updatedAt,

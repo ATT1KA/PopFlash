@@ -1,5 +1,6 @@
-import { createHttpClient, post } from './http-client.js';
 import { config } from '../config.js';
+
+import { createHttpClient, post } from './http-client.js';
 
 interface SteamLoginRequest {
   steamOpenIdToken: string;

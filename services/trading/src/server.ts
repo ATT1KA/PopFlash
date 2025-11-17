@@ -1,10 +1,9 @@
-import express from 'express';
-import helmet from 'helmet';
-import cors from 'cors';
-import morgan from 'morgan';
-import rateLimit from 'express-rate-limit';
-
 import { connectMongo } from '@popflash/database';
+import cors from 'cors';
+import express, { json } from 'express';
+import expressRateLimit from 'express-rate-limit';
+import helmet from 'helmet';
+import morgan from 'morgan';
 
 import { env } from './config/env.js';
 import { registerRoutes } from './routes/index.js';
@@ -17,10 +16,10 @@ export const createServer = async () => {
   app.disable('x-powered-by');
   app.use(helmet());
   app.use(cors({ origin: '*', credentials: false }));
-  app.use(express.json());
+  app.use(json());
   app.use(morgan('combined'));
   app.use(
-    rateLimit({
+    expressRateLimit({
       windowMs: 60_000,
       limit: 120,
       standardHeaders: true,

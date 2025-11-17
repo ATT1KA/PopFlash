@@ -3,6 +3,7 @@ import type { NextFunction, Request, Response } from 'express';
 import { HttpError } from '../utils/http-error.js';
 
 export const errorHandler = (error: Error, _req: Request, res: Response, _next: NextFunction) => {
+  void _next;
   const status = error instanceof HttpError ? error.status : 500;
 
   res.status(status).json({

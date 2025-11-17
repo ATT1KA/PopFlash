@@ -1,8 +1,8 @@
-import express, { type Request, type Response, type NextFunction } from 'express';
 import cors from 'cors';
+import express, { json, urlencoded, type NextFunction, type Request, type Response } from 'express';
+import expressRateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import rateLimit from 'express-rate-limit';
 
 import { config } from './config.js';
 import { registerRoutes } from './routes/index.js';
@@ -25,11 +25,11 @@ export const createServer = () => {
       credentials: true,
     }),
   );
-  app.use(express.json({ limit: '2mb' }));
-  app.use(express.urlencoded({ extended: true }));
+  app.use(json({ limit: '2mb' }));
+  app.use(urlencoded({ extended: true }));
   app.use(morgan('combined'));
   app.use(
-    rateLimit({
+    expressRateLimit({
       windowMs: 60_000,
       limit: 120,
       standardHeaders: true,
@@ -44,6 +44,7 @@ export const createServer = () => {
   registerRoutes(app);
 
   app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+    void _next;
     errorHandler(err, res);
   });
 

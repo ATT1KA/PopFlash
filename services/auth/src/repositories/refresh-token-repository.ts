@@ -1,14 +1,14 @@
-import { addDays } from 'date-fns';
-import bcrypt from 'bcryptjs';
 import { RefreshTokenModel } from '@popflash/database';
+import { compare, hash } from 'bcryptjs';
 
 import { env } from '../config/env.js';
 
 const SALT_ROUNDS = 10;
+const DAY_IN_MS = 86_400_000;
 
 export const storeRefreshToken = async (userId: string, token: string) => {
-  const tokenHash = await bcrypt.hash(token, SALT_ROUNDS);
-  const expiresAt = addDays(new Date(), env.refreshExpirationDays);
+  const tokenHash = await hash(token, SALT_ROUNDS);
+  const expiresAt = new Date(Date.now() + env.refreshExpirationDays * DAY_IN_MS);
 
   await RefreshTokenModel.deleteMany({ userId });
 
@@ -26,7 +26,7 @@ export const verifyRefreshToken = async (userId: string, token: string) => {
     return false;
   }
 
-  return bcrypt.compare(token, record.tokenHash);
+  return compare(token, record.tokenHash);
 };
 
 export const revokeRefreshTokens = (userId: string) =>

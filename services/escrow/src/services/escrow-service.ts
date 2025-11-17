@@ -1,3 +1,4 @@
+import type { Escrow, Trade } from '@popflash/shared';
 import { escrowSchema, tradeSchema } from '@popflash/shared';
 
 import {
@@ -21,7 +22,10 @@ const STATUS_TRANSITIONS: Record<(typeof ESCROW_MILESTONES)[number], string> = {
   'Settlement Completed': 'settled',
 };
 
-const normalizeTrade = (trade: any) =>
+type TradeRecord = Trade & { _id?: string };
+type EscrowRecord = Escrow & { _id?: string };
+
+const normalizeTrade = (trade: TradeRecord) =>
   tradeSchema.parse({
     id: trade._id ?? trade.id,
     buyerUserId: trade.buyerUserId,
@@ -37,7 +41,7 @@ const normalizeTrade = (trade: any) =>
     updatedAt: trade.updatedAt,
   });
 
-const normalizeEscrow = (escrow: any) =>
+const normalizeEscrow = (escrow: EscrowRecord) =>
   escrowSchema.parse({
     id: escrow._id ?? escrow.id,
     tradeId: escrow.tradeId,
@@ -45,10 +49,10 @@ const normalizeEscrow = (escrow: any) =>
     sellerUserId: escrow.sellerUserId,
     status: escrow.status,
     totalAmountUsd: escrow.totalAmountUsd,
-    milestones: escrow.milestones?.map((milestone: any) => ({
+    milestones: escrow.milestones.map((milestone) => ({
       name: milestone.name,
       completedAt: milestone.completedAt ?? undefined,
-    })) ?? [],
+    })),
     createdAt: escrow.createdAt,
     updatedAt: escrow.updatedAt,
   });
@@ -125,10 +129,8 @@ export const markEscrowMilestone = async (tradeId: string, milestoneName: string
     throw new HttpError(400, 'Milestone not part of escrow workflow');
   }
 
-  milestone.completedAt = new Date();
-
   const updatedMilestones = escrow.milestones.map((item) =>
-    item.name === milestoneName ? milestone : item,
+    item.name === milestoneName ? { ...item, completedAt: new Date() } : item,
   );
 
   const updatedEscrow = await updateEscrowMilestones(tradeId, updatedMilestones);

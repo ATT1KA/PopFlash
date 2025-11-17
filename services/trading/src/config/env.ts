@@ -12,7 +12,9 @@ const envSchema = z.object({
 const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
-  throw new Error(`Trading service env validation failed: ${JSON.stringify(parsed.error.format())}`);
+  throw new Error(
+    `Trading service env validation failed: ${JSON.stringify(parsed.error.format())}`,
+  );
 }
 
 export const env = {

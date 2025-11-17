@@ -1,5 +1,6 @@
-import { createHttpClient, get, post } from './http-client.js';
 import { config } from '../config.js';
+
+import { createHttpClient, get, post } from './http-client.js';
 
 interface EscrowStatus {
   tradeId: string;

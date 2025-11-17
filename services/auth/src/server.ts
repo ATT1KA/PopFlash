@@ -1,13 +1,13 @@
-import express from 'express';
-import helmet from 'helmet';
+import { connectMongo } from '@popflash/database';
 import cors from 'cors';
+import express, { json } from 'express';
+import expressRateLimit from 'express-rate-limit';
+import helmet from 'helmet';
 import morgan from 'morgan';
-import rateLimit from 'express-rate-limit';
 
 import { env } from './config/env.js';
-import { connectMongo } from '@popflash/database';
-import { authRouter } from './routes/auth.js';
 import { errorHandler } from './middleware/error-handler.js';
+import { authRouter } from './routes/auth.js';
 
 export const createServer = async () => {
   await connectMongo(env.mongoUri);
@@ -33,10 +33,10 @@ export const createServer = async () => {
       credentials: true,
     }),
   );
-  app.use(express.json());
+  app.use(json());
   app.use(morgan('combined'));
   app.use(
-    rateLimit({
+    expressRateLimit({
       windowMs: 60_000,
       limit: 60,
       standardHeaders: true,

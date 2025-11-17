@@ -11,7 +11,9 @@ interface UpsertUserInput {
 
 export const findUserBySteamId = (steamId: string) => UserModel.findOne({ steamId }).exec();
 
-const mapToDomain = (doc: any): User =>
+type UserRecord = Omit<User, 'id'> & { _id: string; id?: string };
+
+const mapToDomain = (doc: UserRecord): User =>
   userSchema.parse({
     id: doc._id.toString(),
     steamId: doc.steamId,

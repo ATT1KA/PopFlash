@@ -15,8 +15,12 @@
     "outDir": "dist",
     "baseUrl": "../../",
     "paths": {
+      "@popflash/shared": ["packages/shared/src/index.ts"],
       "@popflash/shared/*": ["packages/shared/src/*"],
+      "@popflash/ui": ["packages/ui/src/index.ts"],
       "@popflash/ui/*": ["packages/ui/src/*"],
+      "@popflash/database": ["packages/database/src/index.ts"],
+      "@popflash/database/*": ["packages/database/src/*"],
       "@popflash/config/*": ["packages/config/*"]
     }
   },

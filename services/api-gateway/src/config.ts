@@ -1,12 +1,19 @@
 import 'dotenv/config';
 
-const requiredEnv = ['API_GATEWAY_PORT', 'AUTH_SERVICE_URL', 'TRADING_SERVICE_URL', 'ESCROW_SERVICE_URL'];
+const requiredEnv = [
+  'API_GATEWAY_PORT',
+  'AUTH_SERVICE_URL',
+  'TRADING_SERVICE_URL',
+  'ESCROW_SERVICE_URL',
+];
 
 const missing = requiredEnv.filter((key) => !process.env[key]);
 
 if (missing.length > 0) {
   // eslint-disable-next-line no-console
-  console.warn(`API Gateway missing env vars: ${missing.join(', ')}. Using defaults where possible.`);
+  console.warn(
+    `API Gateway missing env vars: ${missing.join(', ')}. Using defaults where possible.`,
+  );
 }
 
 export const config = {
