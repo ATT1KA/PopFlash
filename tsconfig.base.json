@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2021",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@popflash/shared/*": ["packages/shared/src/*"],
+      "@popflash/ui/*": ["packages/ui/src/*"],
+      "@popflash/config/*": ["packages/config/*"]
+    }
+  }
+}

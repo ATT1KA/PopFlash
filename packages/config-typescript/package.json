@@ -1,0 +1,9 @@
+{
+  "name": "@popflash/config-typescript",
+  "version": "0.1.0",
+  "main": "tsconfig.json",
+  "license": "MIT",
+  "peerDependencies": {
+    "typescript": "^5.3.0"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "popflash",
+  "version": "0.1.0",
+  "private": true,
+  "description": "PopFlash monorepo for web, mobile, and backend services",
+  "license": "MIT",
+  "packageManager": "npm@10.9.2",
+  "scripts": {
+    "lint": "turbo run lint",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "format": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\""
+  },
+  "devDependencies": {
+    "prettier": "3.1.0",
+    "turbo": "2.0.4"
+  },
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*"
+  ]
+}
