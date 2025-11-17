@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 
-import { Schema, model, type Model } from 'mongoose';
 import type { Trade } from '@popflash/shared';
+import { Schema, model, type Model } from 'mongoose';
 
 const tradeSchema = new Schema<Trade>(
   {

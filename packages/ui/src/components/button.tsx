@@ -1,15 +1,14 @@
-import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { clsx } from 'clsx';
+import * as React from 'react';
 
 const buttonStyles = cva(
   'inline-flex items-center justify-center rounded-[12px] font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:pointer-events-none',
   {
     variants: {
       variant: {
-        primary:
-          'bg-[#2EFF9D] text-[#0A0A0F] hover:bg-[#0BFF85] focus-visible:outline-[#3FD7FF]',
+        primary: 'bg-[#2EFF9D] text-[#0A0A0F] hover:bg-[#0BFF85] focus-visible:outline-[#3FD7FF]',
         secondary:
           'border border-[#2EFF9D] text-[#2EFF9D] hover:bg-[#2EFF9D] hover:text-[#0A0A0F] focus-visible:outline-[#3FD7FF]',
         ghost: 'text-[#F7F9FA] hover:bg-white/5 focus-visible:outline-[#3FD7FF]',

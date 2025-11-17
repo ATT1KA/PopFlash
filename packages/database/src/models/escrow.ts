@@ -35,14 +35,7 @@ const escrowSchema = new Schema<EscrowDocument>(
     sellerUserId: { type: String, required: true },
     status: {
       type: String,
-      enum: [
-        'initiated',
-        'funds_captured',
-        'assets_received',
-        'settled',
-        'refunded',
-        'cancelled',
-      ],
+      enum: ['initiated', 'funds_captured', 'assets_received', 'settled', 'refunded', 'cancelled'],
       default: 'initiated',
     },
     milestones: { type: [milestoneSchema], default: [] },
