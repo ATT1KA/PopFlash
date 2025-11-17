@@ -1,0 +1,32 @@
+{
+  "name": "@popflash/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@popflash/ui": "file:../../packages/ui",
+    "clsx": "2.1.0",
+    "lucide-react": "0.441.0",
+    "next": "14.2.10",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@popflash/config-eslint": "file:../../packages/config-eslint",
+    "@popflash/config-typescript": "file:../../packages/config-typescript",
+    "@types/node": "20.10.3",
+    "@types/react": "18.2.38",
+    "@types/react-dom": "18.2.17",
+    "autoprefixer": "10.4.16",
+    "eslint": "8.54.0",
+    "postcss": "8.4.31",
+    "tailwindcss": "3.3.5",
+    "typescript": "5.3.2"
+  }
+}

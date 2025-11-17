@@ -1,0 +1,1 @@
+module.exports = require('@popflash/config-eslint');
