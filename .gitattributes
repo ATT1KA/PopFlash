@@ -1,0 +1,10 @@
+* text=auto eol=lf
+
+# Treat common binary assets explicitly to avoid newline normalization
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.svg binary
