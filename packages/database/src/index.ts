@@ -5,3 +5,4 @@ export * from './models/portfolio.js';
 export * from './models/trade.js';
 export * from './models/escrow.js';
 export * from './models/refresh-token.js';
+export * from './models/insight.js';

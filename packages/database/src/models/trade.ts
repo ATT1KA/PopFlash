@@ -24,7 +24,9 @@ const tradeSchema = new Schema<Trade>(
       enum: [
         'draft',
         'awaiting_payment',
+        'under_review',
         'payment_captured',
+        'settlement_pending',
         'assets_in_escrow',
         'settled',
         'cancelled',

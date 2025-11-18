@@ -1,0 +1,9 @@
+{
+  "extends": "@popflash/config-typescript",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src"],
+  "exclude": ["dist", "node_modules"]
+}
