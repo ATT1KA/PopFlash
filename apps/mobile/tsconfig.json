@@ -1,0 +1,24 @@
+{
+  "extends": "@popflash/config-typescript/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "jsx": "react-native",
+    "types": ["react", "react-native"],
+    "paths": {
+      "@/components/*": ["src/components/*"],
+      "@/hooks/*": ["src/hooks/*"],
+      "@/providers/*": ["src/providers/*"],
+      "@/data/*": ["src/data/*"],
+      "@/theme": ["src/theme/index"],
+      "@/types/*": ["src/types/*"]
+    }
+  },
+  "include": [
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "expo-env.d.ts"
+  ],
+  "exclude": ["node_modules"]
+}
