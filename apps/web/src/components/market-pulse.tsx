@@ -61,7 +61,9 @@ export const MarketPulse = () => {
             <p className="text-xs uppercase tracking-wide text-textSecondary">Top mover</p>
             <h3 className="mt-2 text-sm font-medium leading-snug text-textPrimary">{mover.name}</h3>
             <div className="mt-4 flex items-center justify-between text-sm">
-              <span className="rounded-full bg-primary/10 px-3 py-1 text-primary">{mover.change}</span>
+              <span className="rounded-full bg-primary/10 px-3 py-1 text-primary">
+                {mover.change}
+              </span>
               <span className="text-textSecondary">{mover.volume}</span>
             </div>
             <p className="mt-3 text-xs text-textSecondary/80">VWAP reference {mover.reference}</p>

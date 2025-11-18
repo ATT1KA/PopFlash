@@ -21,7 +21,10 @@ export const RiskIndicators = () => (
     <h2 className="text-xl font-heading font-semibold">Risk & Compliance</h2>
     <div className="mt-5 space-y-4">
       {riskSignals.map((signal) => (
-        <article key={signal.label} className="rounded-2xl border border-white/5 bg-background/70 p-4">
+        <article
+          key={signal.label}
+          className="rounded-2xl border border-white/5 bg-background/70 p-4"
+        >
           <p className="text-xs uppercase tracking-wide text-textSecondary">{signal.label}</p>
           <p className="mt-1 text-lg font-semibold text-primary">{signal.value}</p>
           <p className="text-xs text-textSecondary/80">{signal.detail}</p>

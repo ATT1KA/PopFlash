@@ -1,9 +1,9 @@
-import { Sidebar } from '@components/sidebar';
 import { ComplianceTimeline } from '@components/compliance-timeline';
 import { InsightsFeed } from '@components/insights-feed';
 import { MarketPulse } from '@components/market-pulse';
 import { PortfolioPerformance } from '@components/portfolio-performance';
 import { RiskIndicators } from '@components/risk-indicators';
+import { Sidebar } from '@components/sidebar';
 import { TopBar } from '@components/top-bar';
 import { TradeActivity } from '@components/trade-activity';
 

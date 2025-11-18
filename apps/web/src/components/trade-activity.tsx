@@ -33,7 +33,9 @@ export const TradeActivity = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-heading font-semibold">Trade Blotter</h2>
-          <p className="text-sm text-textSecondary">Real-time lifecycle status for strategic positions</p>
+          <p className="text-sm text-textSecondary">
+            Real-time lifecycle status for strategic positions
+          </p>
         </div>
         <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-textSecondary">
           12 workflows in-flight
