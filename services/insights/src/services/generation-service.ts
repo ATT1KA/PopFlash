@@ -31,7 +31,8 @@ export const buildInsightsFromContext = (context: GenerationContext): InsightDra
   return insights.slice(0, MAX_INSIGHTS);
 };
 
-const formatUsd = (value: number) => `$${value.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+const formatUsd = (value: number) =>
+  `$${value.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
 
 const percent = (part: number, whole: number) => (whole === 0 ? 0 : (part / whole) * 100);
 
@@ -77,7 +78,9 @@ const generatePortfolioConcentrationInsight = (context: GenerationContext): Insi
       userId: context.userId,
       assetId: topHolding.assetId,
       headline: `${asset?.name ?? 'Top holding'} concentration at ${share.toFixed(1)}%`,
-      detail: `Your leading position accounts for ${share.toFixed(1)}% of portfolio value, signalling concentration risk if market volatility spikes.`,
+      detail: `Your leading position accounts for ${share.toFixed(
+        1,
+      )}% of portfolio value, signalling concentration risk if market volatility spikes.`,
       narrative: `Holdings analysis over the last ${context.lookbackDays} days shows one asset dominating exposure. Consider trimming or hedging to keep any single position below 30% of total net asset value.`,
       sentiment: sentimentFromShare(share),
       impact: 'portfolio',
@@ -141,7 +144,9 @@ const generateEscrowStallInsight = (context: GenerationContext): InsightDraft[] 
       userId: context.userId,
       tradeId: worst.escrow.tradeId,
       headline: `Escrow ${worst.escrow.tradeId} stalled at ${formatStatus(worst.escrow.status)}`,
-      detail: `Escrow flow has been open for ${worst.hoursOpen.toFixed(0)} hours without settlement. Counterparty funds remain locked increasing counterparty risk.`,
+      detail: `Escrow flow has been open for ${worst.hoursOpen.toFixed(
+        0,
+      )} hours without settlement. Counterparty funds remain locked increasing counterparty risk.`,
       narrative: `Escrow telemetry shows process drift beyond the 48 hour SLA. Recommend escalating with the counterparty and verifying milestone completion to avoid disputes.`,
       sentiment: 'bearish',
       impact: 'risk',
@@ -159,7 +164,13 @@ const generateEscrowStallInsight = (context: GenerationContext): InsightDraft[] 
       channels: ['in_app', 'email'],
       references: [
         { type: 'trade', id: worst.escrow.tradeId },
-        { type: 'counterparty', id: worst.escrow.buyerUserId === context.userId ? worst.escrow.sellerUserId : worst.escrow.buyerUserId },
+        {
+          type: 'counterparty',
+          id:
+            worst.escrow.buyerUserId === context.userId
+              ? worst.escrow.sellerUserId
+              : worst.escrow.buyerUserId,
+        },
       ],
       metadata: {
         escrowId: extractId(worst.escrow),
@@ -175,8 +186,10 @@ const generateSettlementAttentionInsight = (context: GenerationContext): Insight
       trade,
       hoursSinceUpdate: (context.now.getTime() - new Date(trade.updatedAt).getTime()) / 3_600_000,
     }))
-    .filter(({ trade, hoursSinceUpdate }) =>
-      ['under_review', 'settlement_pending', 'assets_in_escrow'].includes(trade.status) && hoursSinceUpdate >= 12,
+    .filter(
+      ({ trade, hoursSinceUpdate }) =>
+        ['under_review', 'settlement_pending', 'assets_in_escrow'].includes(trade.status) &&
+        hoursSinceUpdate >= 12,
     );
 
   if (flaggedTrades.length === 0) {
@@ -187,14 +200,19 @@ const generateSettlementAttentionInsight = (context: GenerationContext): Insight
 
   const impact: InsightImpactArea = pending.trade.status === 'under_review' ? 'risk' : 'operations';
   const priority: InsightPriority = pending.hoursSinceUpdate >= 24 ? 'high' : 'medium';
-  const sentiment: InsightSentiment = pending.trade.status === 'under_review' ? 'bearish' : 'neutral';
+  const sentiment: InsightSentiment =
+    pending.trade.status === 'under_review' ? 'bearish' : 'neutral';
 
   return [
     {
       userId: context.userId,
       tradeId: pending.trade.id ?? extractId(pending.trade),
-      headline: `Trade ${pending.trade.id ?? extractId(pending.trade)} requires settlement attention`,
-      detail: `Status ${formatStatus(pending.trade.status)} has not progressed for ${pending.hoursSinceUpdate.toFixed(0)} hours.`,
+      headline: `Trade ${
+        pending.trade.id ?? extractId(pending.trade)
+      } requires settlement attention`,
+      detail: `Status ${formatStatus(
+        pending.trade.status,
+      )} has not progressed for ${pending.hoursSinceUpdate.toFixed(0)} hours.`,
       narrative: `Monitoring flagged the trade as idle past operational guardrails. Coordinating with escrow and compliance will reduce dispute probability.`,
       sentiment,
       impact,
@@ -210,9 +228,7 @@ const generateSettlementAttentionInsight = (context: GenerationContext): Insight
       ],
       tags: ['trading', 'settlement'],
       channels: ['in_app'],
-      references: [
-        { type: 'trade', id: pending.trade.id ?? extractId(pending.trade) },
-      ],
+      references: [{ type: 'trade', id: pending.trade.id ?? extractId(pending.trade) }],
       metadata: {
         tradeStatus: pending.trade.status,
         hoursIdle: pending.hoursSinceUpdate,
@@ -235,7 +251,9 @@ const generateVelocityInsight = (context: GenerationContext): InsightDraft[] => 
     {
       userId: context.userId,
       headline: `High-frequency desk activity detected (${tradeCount} trades)`,
-      detail: `Desk executed ${tradeCount} trades over the last ${context.lookbackDays} days with ${formatUsd(totalVolume)} in notional flow.`,
+      detail: `Desk executed ${tradeCount} trades over the last ${
+        context.lookbackDays
+      } days with ${formatUsd(totalVolume)} in notional flow.`,
       narrative: `Velocity models indicate elevated throughput. Ensure funding lines and escrow coverage remain aligned with spike-level activity.`,
       sentiment: 'bullish',
       impact: 'operations',

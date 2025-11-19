@@ -20,7 +20,9 @@ const envSchema = z
 const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
-  const message = parsed.error.errors.map((error) => `${error.path.join('.')}: ${error.message}`).join(', ');
+  const message = parsed.error.errors
+    .map((error) => `${error.path.join('.')}: ${error.message}`)
+    .join(', ');
   throw new Error(`Invalid environment configuration for insights service: ${message}`);
 }
 

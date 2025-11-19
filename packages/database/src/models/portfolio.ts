@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 
-import { Schema, model, type Model } from 'mongoose';
+import { Schema, model, type HydratedDocument, type Model } from 'mongoose';
 
 interface PortfolioHolding {
   assetId: string;
@@ -27,7 +27,9 @@ const holdingSchema = new Schema<PortfolioHolding>(
   { _id: false },
 );
 
-const portfolioSchema = new Schema<PortfolioDocument>(
+type PortfolioEntity = PortfolioDocument & { _id: string };
+
+const portfolioSchema = new Schema<PortfolioEntity>(
   {
     _id: { type: String, default: () => randomUUID() },
     userId: { type: String, required: true, unique: true, index: true },
@@ -43,7 +45,9 @@ const portfolioSchema = new Schema<PortfolioDocument>(
   },
 );
 
-export const PortfolioModel: Model<PortfolioDocument> = model<PortfolioDocument>(
+export type PortfolioMongoDocument = HydratedDocument<PortfolioEntity>;
+
+export const PortfolioModel: Model<PortfolioEntity> = model<PortfolioEntity>(
   'Portfolio',
   portfolioSchema,
 );

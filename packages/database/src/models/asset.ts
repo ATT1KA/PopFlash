@@ -1,9 +1,11 @@
 import { randomUUID } from 'crypto';
 
 import type { Asset } from '@popflash/shared';
-import { Schema, model, type Model } from 'mongoose';
+import { Schema, model, type HydratedDocument, type Model } from 'mongoose';
 
-const assetSchema = new Schema<Asset>(
+type AssetEntity = Asset & { _id: string };
+
+const assetSchema = new Schema<AssetEntity>(
   {
     _id: { type: String, default: () => randomUUID() },
     name: { type: String, required: true },
@@ -36,4 +38,6 @@ const assetSchema = new Schema<Asset>(
 
 assetSchema.index({ name: 'text', description: 'text' });
 
-export const AssetModel: Model<Asset> = model<Asset>('Asset', assetSchema);
+export type AssetDocument = HydratedDocument<AssetEntity>;
+
+export const AssetModel: Model<AssetEntity> = model<AssetEntity>('Asset', assetSchema);

@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 
-import { Schema, model, type Model } from 'mongoose';
+import { Schema, model, type HydratedDocument, type Model } from 'mongoose';
 
 export interface RefreshTokenDocument {
   id: string;
@@ -11,7 +11,9 @@ export interface RefreshTokenDocument {
   updatedAt: Date;
 }
 
-const refreshTokenSchema = new Schema<RefreshTokenDocument>(
+type RefreshTokenEntity = RefreshTokenDocument & { _id: string };
+
+const refreshTokenSchema = new Schema<RefreshTokenEntity>(
   {
     _id: { type: String, default: () => randomUUID() },
     userId: { type: String, required: true, index: true },
@@ -26,7 +28,9 @@ const refreshTokenSchema = new Schema<RefreshTokenDocument>(
 
 refreshTokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
-export const RefreshTokenModel: Model<RefreshTokenDocument> = model<RefreshTokenDocument>(
+export type RefreshTokenMongoDocument = HydratedDocument<RefreshTokenEntity>;
+
+export const RefreshTokenModel: Model<RefreshTokenEntity> = model<RefreshTokenEntity>(
   'RefreshToken',
   refreshTokenSchema,
 );

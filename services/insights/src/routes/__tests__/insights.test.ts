@@ -1,8 +1,9 @@
-import express from 'express';
+import express, { json } from 'express';
 import request from 'supertest';
 import { describe, expect, it, beforeEach, vi } from 'vitest';
 
 import { insightsRouter } from '../insights.js';
+import { errorHandler } from '../../utils/error-handler.js';
 
 vi.mock('../../services/insight-service.js', () => ({
   fetchInsights: vi.fn(),
@@ -10,13 +11,15 @@ vi.mock('../../services/insight-service.js', () => ({
   setInsightStatus: vi.fn(),
 }));
 
-const { fetchInsights, generateInsightsForUser, setInsightStatus } =
-  await import('../../services/insight-service.js');
+const { fetchInsights, generateInsightsForUser, setInsightStatus } = await import(
+  '../../services/insight-service.js'
+);
 
 const createApp = () => {
   const app = express();
-  app.use(express.json());
+  app.use(json());
   app.use('/v1/insights', insightsRouter);
+  app.use(errorHandler);
   return app;
 };
 

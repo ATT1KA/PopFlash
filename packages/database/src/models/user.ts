@@ -1,9 +1,11 @@
 import { randomUUID } from 'crypto';
 
 import type { User } from '@popflash/shared';
-import { Schema, model, type Model } from 'mongoose';
+import { Schema, model, type HydratedDocument, type Model } from 'mongoose';
 
-const userSchema = new Schema<User>(
+type UserEntity = User & { _id: string };
+
+const userSchema = new Schema<UserEntity>(
   {
     _id: { type: String, default: () => randomUUID() },
     steamId: { type: String, required: true, index: true, unique: true },
@@ -28,4 +30,6 @@ const userSchema = new Schema<User>(
   },
 );
 
-export const UserModel: Model<User> = model<User>('User', userSchema);
+export type UserDocument = HydratedDocument<UserEntity>;
+
+export const UserModel: Model<UserEntity> = model<UserEntity>('User', userSchema);

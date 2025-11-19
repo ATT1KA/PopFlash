@@ -1,5 +1,4 @@
-import type { Insight, InsightStatus } from '@popflash/shared';
-import { insightSchema } from '@popflash/shared';
+import { insightSchema, type Insight, type InsightStatus } from '@popflash/shared';
 
 import { env } from '../config/env.js';
 import {
@@ -15,6 +14,7 @@ import {
   type InsightDraft,
   type ListInsightsFilters,
 } from '../repositories/insight-repository.js';
+
 import { buildInsightsFromContext } from './generation-service.js';
 
 interface GenerateInsightsInput {
@@ -36,11 +36,15 @@ export const generateInsightsForUser = async (input: GenerateInsightsInput) => {
   const since = new Date(now.getTime() - lookbackMs);
 
   const [portfolio, trades, escrows] = await Promise.all([
-    input.scope?.includes('portfolio') ?? true ? findPortfolioByUserId(input.userId) : Promise.resolve(null),
+    input.scope?.includes('portfolio') ?? true
+      ? findPortfolioByUserId(input.userId)
+      : Promise.resolve(null),
     input.scope?.includes('trades') ?? true
       ? listRecentTradesForUser(input.userId, since, env.maxRecentTrades)
       : Promise.resolve([]),
-    input.scope?.includes('escrow') ?? true ? listOpenEscrowsForUser(input.userId) : Promise.resolve([]),
+    input.scope?.includes('escrow') ?? true
+      ? listOpenEscrowsForUser(input.userId)
+      : Promise.resolve([]),
   ]);
 
   const assetIds = new Set<string>();
@@ -140,7 +144,9 @@ const extractId = (record?: { id?: string; _id?: string | { toString(): string }
   return undefined;
 };
 
-const createBaselineInsight = (context: Parameters<typeof buildInsightsFromContext>[0]): InsightDraft => ({
+const createBaselineInsight = (
+  context: Parameters<typeof buildInsightsFromContext>[0],
+): InsightDraft => ({
   userId: context.userId,
   headline: `Systems check: no anomalies detected (${context.lookbackDays}d lookback)`,
   detail: 'Insight engine found no risk or operational alerts. Maintaining monitoring cadence.',

@@ -5,6 +5,7 @@ const requiredEnv = [
   'AUTH_SERVICE_URL',
   'TRADING_SERVICE_URL',
   'ESCROW_SERVICE_URL',
+  'INSIGHTS_SERVICE_URL',
 ];
 
 const missing = requiredEnv.filter((key) => !process.env[key]);
@@ -21,6 +22,7 @@ export const config = {
   authServiceUrl: process.env.AUTH_SERVICE_URL ?? 'http://localhost:4100',
   tradingServiceUrl: process.env.TRADING_SERVICE_URL ?? 'http://localhost:4200',
   escrowServiceUrl: process.env.ESCROW_SERVICE_URL ?? 'http://localhost:4300',
+  insightsServiceUrl: process.env.INSIGHTS_SERVICE_URL ?? 'http://localhost:4400',
   corsOrigins: (process.env.CORS_ORIGINS ?? 'http://localhost:3000').split(','),
   requestTimeoutMs: Number(process.env.API_GATEWAY_TIMEOUT_MS ?? 10_000),
 } as const;

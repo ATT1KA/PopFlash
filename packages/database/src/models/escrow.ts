@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 
-import { Schema, model, type Model } from 'mongoose';
+import { Schema, model, type HydratedDocument, type Model } from 'mongoose';
 
 interface EscrowMilestone {
   name: string;
@@ -27,7 +27,9 @@ const milestoneSchema = new Schema<EscrowMilestone>(
   { _id: false },
 );
 
-const escrowSchema = new Schema<EscrowDocument>(
+type EscrowEntity = EscrowDocument & { _id: string };
+
+const escrowSchema = new Schema<EscrowEntity>(
   {
     _id: { type: String, default: () => randomUUID() },
     tradeId: { type: String, required: true, unique: true, index: true },
@@ -47,4 +49,6 @@ const escrowSchema = new Schema<EscrowDocument>(
   },
 );
 
-export const EscrowModel: Model<EscrowDocument> = model<EscrowDocument>('Escrow', escrowSchema);
+export type EscrowMongoDocument = HydratedDocument<EscrowEntity>;
+
+export const EscrowModel: Model<EscrowEntity> = model<EscrowEntity>('Escrow', escrowSchema);

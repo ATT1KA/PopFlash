@@ -11,7 +11,7 @@
   "scripts": {
     "build": "tsup src/index.ts --dts --format esm,cjs",
     "lint": "eslint --ext .ts,.tsx src",
-    "test": "vitest"
+    "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
     "zod": "3.22.4"

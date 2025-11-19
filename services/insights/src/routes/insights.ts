@@ -1,14 +1,17 @@
-import { Router } from 'express';
-import { z } from 'zod';
-
 import {
   insightChannelSchema,
   insightImpactAreaSchema,
   insightPrioritySchema,
   insightStatusSchema,
 } from '@popflash/shared';
+import { Router } from 'express';
+import { z } from 'zod';
 
-import { fetchInsights, generateInsightsForUser, setInsightStatus } from '../services/insight-service.js';
+import {
+  fetchInsights,
+  generateInsightsForUser,
+  setInsightStatus,
+} from '../services/insight-service.js';
 import { HttpError } from '../utils/http-error.js';
 
 const router = Router();

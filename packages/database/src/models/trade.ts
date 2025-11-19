@@ -1,9 +1,11 @@
 import { randomUUID } from 'crypto';
 
 import type { Trade } from '@popflash/shared';
-import { Schema, model, type Model } from 'mongoose';
+import { Schema, model, type HydratedDocument, type Model } from 'mongoose';
 
-const tradeSchema = new Schema<Trade>(
+type TradeEntity = Trade & { _id: string };
+
+const tradeSchema = new Schema<TradeEntity>(
   {
     _id: { type: String, default: () => randomUUID() },
     buyerUserId: { type: String, required: true, index: true },
@@ -43,4 +45,6 @@ const tradeSchema = new Schema<Trade>(
 
 tradeSchema.index({ createdAt: -1 });
 
-export const TradeModel: Model<Trade> = model<Trade>('Trade', tradeSchema);
+export type TradeDocument = HydratedDocument<TradeEntity>;
+
+export const TradeModel: Model<TradeEntity> = model<TradeEntity>('Trade', tradeSchema);

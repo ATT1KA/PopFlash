@@ -1,10 +1,5 @@
 import { InsightModel } from '@popflash/database';
-import type {
-  Insight,
-  InsightImpactArea,
-  InsightPriority,
-  InsightStatus,
-} from '@popflash/shared';
+import type { Insight, InsightImpactArea, InsightPriority, InsightStatus } from '@popflash/shared';
 import type { FilterQuery } from 'mongoose';
 
 export interface ListInsightsFilters {
@@ -20,7 +15,16 @@ export interface ListInsightsFilters {
 export interface InsightDraft
   extends Omit<
     Insight,
-    'id' | 'generatedAt' | 'updatedAt' | 'status' | 'channels' | 'recommendedActions' | 'supportingMetrics' | 'tags' | 'references' | 'metadata'
+    | 'id'
+    | 'generatedAt'
+    | 'updatedAt'
+    | 'status'
+    | 'channels'
+    | 'recommendedActions'
+    | 'supportingMetrics'
+    | 'tags'
+    | 'references'
+    | 'metadata'
   > {
   status?: InsightStatus;
   channels?: Insight['channels'];

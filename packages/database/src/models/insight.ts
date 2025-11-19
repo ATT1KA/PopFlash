@@ -1,9 +1,11 @@
 import { randomUUID } from 'crypto';
 
 import type { Insight } from '@popflash/shared';
-import { Schema, model, type Model } from 'mongoose';
+import { Schema, model, type HydratedDocument, type Model } from 'mongoose';
 
-const insightSchema = new Schema<Insight>(
+type InsightEntity = Insight & { _id: string };
+
+const insightSchema = new Schema<InsightEntity>(
   {
     _id: { type: String, default: () => randomUUID() },
     userId: { type: String, default: null, index: true },
@@ -13,7 +15,12 @@ const insightSchema = new Schema<Insight>(
     detail: { type: String, required: true },
     narrative: { type: String, required: true },
     sentiment: { type: String, enum: ['bullish', 'neutral', 'bearish'], required: true },
-    impact: { type: String, enum: ['portfolio', 'operations', 'risk'], required: true, index: true },
+    impact: {
+      type: String,
+      enum: ['portfolio', 'operations', 'risk'],
+      required: true,
+      index: true,
+    },
     confidence: { type: Number, min: 0, max: 1, required: true },
     priority: { type: String, enum: ['low', 'medium', 'high'], default: 'medium', index: true },
     status: { type: String, enum: ['draft', 'active', 'archived'], default: 'active', index: true },
@@ -37,7 +44,11 @@ const insightSchema = new Schema<Insight>(
     references: {
       type: [
         {
-          type: { type: String, enum: ['trade', 'asset', 'portfolio', 'counterparty', 'compliance'], default: 'portfolio' },
+          type: {
+            type: String,
+            enum: ['trade', 'asset', 'portfolio', 'counterparty', 'compliance'],
+            default: 'portfolio',
+          },
           id: { type: String, required: false },
         },
       ],
@@ -54,7 +65,13 @@ const insightSchema = new Schema<Insight>(
   },
 );
 
-insightSchema.index({ userId: 1, status: 1, generatedAt: -1 });
+insightSchema.index({
+  userId: 1,
+  status: 1,
+  generatedAt: -1,
+});
 insightSchema.index({ tags: 1 });
 
-export const InsightModel: Model<Insight> = model<Insight>('Insight', insightSchema);
+export type InsightDocument = HydratedDocument<InsightEntity>;
+
+export const InsightModel: Model<InsightEntity> = model<InsightEntity>('Insight', insightSchema);

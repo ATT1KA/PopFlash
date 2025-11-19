@@ -24,6 +24,16 @@ export const post = async <T>(
   return response.data;
 };
 
+export const patch = async <T>(
+  client: AxiosInstance,
+  url: string,
+  data?: unknown,
+  config?: AxiosRequestConfig,
+) => {
+  const response = await client.patch<T>(url, data, config);
+  return response.data;
+};
+
 export const del = async <T>(client: AxiosInstance, url: string, config?: AxiosRequestConfig) => {
   const response = await client.delete<T>(url, config);
   return response.data;
