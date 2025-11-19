@@ -1,9 +1,9 @@
 import express, { json } from 'express';
 import request from 'supertest';
-import { describe, expect, it, beforeEach, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { insightsRouter } from '../insights.js';
 import { errorHandler } from '../../utils/error-handler.js';
+import { insightsRouter } from '../insights.js';
 
 vi.mock('../../services/insight-service.js', () => ({
   fetchInsights: vi.fn(),
