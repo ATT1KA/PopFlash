@@ -1,4 +1,4 @@
-import { ComplianceTimeline } from '@components/compliance-timeline';
+import { ComplianceDashboard } from '@components/compliance-timeline';
 import { InsightsFeed } from '@components/insights-feed';
 import { MarketPulse } from '@components/market-pulse';
 import { PortfolioPerformance } from '@components/portfolio-performance';
@@ -23,7 +23,7 @@ export default function Home() {
             <aside className="space-y-6">
               <PortfolioPerformance />
               <RiskIndicators />
-              <ComplianceTimeline />
+              <ComplianceDashboard />
             </aside>
           </div>
         </main>
