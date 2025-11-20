@@ -6,3 +6,7 @@ export * from './models/trade.js';
 export * from './models/escrow.js';
 export * from './models/refresh-token.js';
 export * from './models/insight.js';
+export * from './models/audit-event.js';
+export * from './models/compliance-requirement.js';
+export * from './models/compliance-verification.js';
+export * from './models/financial-compliance-status.js';

@@ -1,5 +1,4 @@
-import type { Escrow, Trade } from '@popflash/shared';
-import { escrowSchema, tradeSchema } from '@popflash/shared';
+import { escrowSchema, tradeSchema, type Escrow, type Trade } from '@popflash/shared';
 
 import {
   createEscrow,
@@ -9,6 +8,11 @@ import {
 } from '../repositories/escrow-repository.js';
 import { findTradeById } from '../repositories/trade-repository.js';
 import { HttpError } from '../utils/http-error.js';
+
+import {
+  ensureEscrowComplianceVerification,
+  syncEscrowComplianceForMilestone,
+} from './compliance-integration-service.js';
 
 export const ESCROW_MILESTONES = [
   'Funds Captured',
@@ -87,7 +91,15 @@ export const initiateEscrow = async ({
   const existing = await findEscrowByTradeId(tradeId);
 
   if (existing) {
-    return normalizeEscrow(existing);
+    const normalizedExisting = normalizeEscrow(existing);
+
+    await ensureEscrowComplianceVerification(tradeId, {
+      buyerUserId: normalizedExisting.buyerUserId,
+      sellerUserId: normalizedExisting.sellerUserId,
+      totalAmountUsd: normalizedExisting.totalAmountUsd,
+    });
+
+    return normalizedExisting;
   }
 
   const escrow = await createEscrow({
@@ -99,7 +111,15 @@ export const initiateEscrow = async ({
     milestones: ESCROW_MILESTONES.map((name) => ({ name })),
   });
 
-  return normalizeEscrow(escrow.toObject());
+  const normalized = normalizeEscrow(escrow.toObject());
+
+  await ensureEscrowComplianceVerification(tradeId, {
+    buyerUserId: normalized.buyerUserId,
+    sellerUserId: normalized.sellerUserId,
+    totalAmountUsd: normalized.totalAmountUsd,
+  });
+
+  return normalized;
 };
 
 export const getEscrowStatus = async (tradeId: string) => {
@@ -141,6 +161,8 @@ export const markEscrowMilestone = async (tradeId: string, milestoneName: string
 
   const nextStatus = STATUS_TRANSITIONS[milestoneName as (typeof ESCROW_MILESTONES)[number]];
 
+  let persistedEscrow = updatedEscrow;
+
   if (nextStatus) {
     const finalEscrow = await updateEscrowStatus(tradeId, nextStatus);
 
@@ -148,8 +170,16 @@ export const markEscrowMilestone = async (tradeId: string, milestoneName: string
       throw new HttpError(500, 'Failed to update escrow status');
     }
 
-    return normalizeEscrow(finalEscrow);
+    persistedEscrow = finalEscrow;
   }
 
-  return normalizeEscrow(updatedEscrow);
+  const normalized = normalizeEscrow(persistedEscrow);
+
+  await syncEscrowComplianceForMilestone(tradeId, milestoneName, {
+    buyerUserId: normalized.buyerUserId,
+    sellerUserId: normalized.sellerUserId,
+    totalAmountUsd: normalized.totalAmountUsd,
+  });
+
+  return normalized;
 };
