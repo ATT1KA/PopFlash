@@ -1,0 +1,33 @@
+{
+  "extends": "@popflash/config-typescript/tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["app/*"],
+      "@components/*": ["components/*"],
+      "@hooks/*": ["hooks/*"],
+      "@lib/*": ["lib/*"],
+      "@types/*": ["types/*"]
+    },
+    "types": [
+      "expo",
+      "react",
+      "react-native"
+    ]
+  },
+  "include": [
+    "app",
+    "components",
+    "hooks",
+    "lib",
+    "types",
+    "metro.config.js",
+    "babel.config.js",
+    "app.config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
