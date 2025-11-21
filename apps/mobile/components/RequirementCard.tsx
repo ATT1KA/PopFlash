@@ -75,25 +75,19 @@ const styles = StyleSheet.create({
     gap: 14,
     padding: 20,
   },
+  description: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   header: {
     alignItems: 'center',
     flexDirection: 'row',
     gap: 12,
     justifyContent: 'space-between',
-  },
-  title: {
-    flex: 1,
-    fontSize: 18,
-    fontWeight: '700',
-  },
-  description: {
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  metaRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
   },
   metaItem: {
     alignItems: 'center',
@@ -105,12 +99,18 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
   },
-  footer: {
+  metaRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    gap: 12,
   },
   timestamp: {
     color: palette.slate700,
     fontSize: 12,
+  },
+  title: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: '700',
   },
 });

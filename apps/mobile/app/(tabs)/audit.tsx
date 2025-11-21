@@ -1,5 +1,4 @@
 import type { AuditEventSeverity } from '@popflash/shared';
-
 import React, { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
@@ -111,4 +110,3 @@ const styles = StyleSheet.create({
     gap: 16,
   },
 });
-

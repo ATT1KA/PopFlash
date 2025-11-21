@@ -10,12 +10,21 @@ interface ScreenContainerProps {
   onRefresh?: () => void;
 }
 
-export const ScreenContainer = ({ children, refreshing = false, onRefresh }: ScreenContainerProps) => {
+export const ScreenContainer = ({
+  children,
+  refreshing = false,
+  onRefresh,
+}: ScreenContainerProps) => {
   const isDark = useColorScheme() === 'dark';
 
   return (
     <ScrollView
-      style={[styles.container, { backgroundColor: isDark ? surfaceColors.backgroundDark : palette.slate50 }]}
+      style={[
+        styles.container,
+        {
+          backgroundColor: isDark ? surfaceColors.backgroundDark : palette.slate50,
+        },
+      ]}
       contentContainerStyle={styles.content}
       refreshControl={
         onRefresh ? (

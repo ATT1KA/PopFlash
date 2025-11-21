@@ -1,5 +1,11 @@
-import { useMemo } from 'react';
+import type {
+  ComplianceFramework,
+  ComplianceRequirementStatus,
+  VerificationScope,
+  VerificationStatus,
+} from '@popflash/shared';
 import { useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
 
 import type {
   ComplianceSummary,
@@ -16,12 +22,6 @@ import {
   fetchComplianceVerifications,
   fetchFinancialStatuses,
 } from '@lib/compliance-api';
-import type {
-  ComplianceFramework,
-  ComplianceRequirementStatus,
-  VerificationScope,
-  VerificationStatus,
-} from '@popflash/shared';
 
 const isApiConfigured = Boolean(complianceApiBaseUrl);
 

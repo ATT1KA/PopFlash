@@ -5,7 +5,10 @@ import type {
   VerificationStatus,
 } from '@popflash/shared';
 
-export const formatDateTime = (value?: Date | string | null, options?: Intl.DateTimeFormatOptions) => {
+export const formatDateTime = (
+  value?: Date | string | null,
+  options?: Intl.DateTimeFormatOptions,
+) => {
   if (!value) {
     return '—';
   }
@@ -61,9 +64,11 @@ const healthPalette: Record<ComplianceHealth, PaletteToken> = {
   unknown: { label: 'Unknown', color: '#94a3b8', background: '#94a3b826' },
 };
 
-export const getRequirementStatusToken = (status: ComplianceRequirementStatus) => requirementPalette[status];
+export const getRequirementStatusToken = (status: ComplianceRequirementStatus) =>
+  requirementPalette[status];
 
-export const getVerificationStatusToken = (status: VerificationStatus) => verificationPalette[status];
+export const getVerificationStatusToken = (status: VerificationStatus) =>
+  verificationPalette[status];
 
 export const getSeverityToken = (severity: AuditEventSeverity) => severityPalette[severity];
 

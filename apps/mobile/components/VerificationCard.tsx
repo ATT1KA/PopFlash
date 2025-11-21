@@ -1,7 +1,6 @@
-import type { ComplianceVerification } from '@popflash/shared';
-
-import React from 'react';
 import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
+import type { ComplianceVerification } from '@popflash/shared';
+import React from 'react';
 import { StyleSheet, Text, View, useColorScheme } from 'react-native';
 
 import { StatusBadge } from './StatusBadge';
@@ -58,6 +57,11 @@ export const VerificationCard = ({ verification }: VerificationCardProps) => {
 };
 
 const styles = StyleSheet.create({
+  badgeRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 12,
+  },
   card: {
     borderColor: palette.cobaltBorder,
     borderRadius: 18,
@@ -65,47 +69,10 @@ const styles = StyleSheet.create({
     gap: 16,
     padding: 20,
   },
-  header: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  titleContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 8,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  badgeRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 12,
-  },
   entityLabel: {
     color: palette.slate800,
     fontSize: 14,
     fontWeight: '600',
-  },
-  scopeContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
-  },
-  scopeBadge: {
-    backgroundColor: palette.slateTranslucent,
-    borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  scopeText: {
-    color: palette.slate650,
-    fontSize: 12,
-    fontWeight: '600',
-    letterSpacing: 0.6,
-    textTransform: 'uppercase',
   },
   footer: {
     alignItems: 'center',
@@ -115,5 +82,37 @@ const styles = StyleSheet.create({
   footerLabel: {
     color: palette.slate650,
     fontSize: 12,
+  },
+  header: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  scopeBadge: {
+    backgroundColor: palette.slateTranslucent,
+    borderRadius: 999,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  scopeContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+  },
+  scopeText: {
+    color: palette.slate650,
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  titleContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 8,
   },
 });

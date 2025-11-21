@@ -1,6 +1,3 @@
-import Constants from 'expo-constants';
-import { z } from 'zod';
-
 import {
   auditEventSchema,
   complianceRequirementSchema,
@@ -9,9 +6,11 @@ import {
   financialComplianceStatusSchema,
   verificationStatusSchema,
 } from '@popflash/shared';
+import ExpoConstants from 'expo-constants';
+import { z } from 'zod';
 
 const API_BASE_URL =
-  process.env.EXPO_PUBLIC_API_BASE_URL ?? Constants.expoConfig?.extra?.apiBaseUrl ?? '';
+  process.env.EXPO_PUBLIC_API_BASE_URL ?? ExpoConstants.expoConfig?.extra?.apiBaseUrl ?? '';
 
 export const complianceApiBaseUrl = API_BASE_URL;
 

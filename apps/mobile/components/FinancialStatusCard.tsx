@@ -1,7 +1,6 @@
-import type { FinancialComplianceStatus } from '@popflash/shared';
-
-import React from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import type { FinancialComplianceStatus } from '@popflash/shared';
+import React from 'react';
 import { StyleSheet, Text, View, useColorScheme } from 'react-native';
 
 import { StatusBadge } from './StatusBadge';
@@ -158,4 +157,3 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
-

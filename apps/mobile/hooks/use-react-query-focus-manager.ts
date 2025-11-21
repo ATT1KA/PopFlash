@@ -1,6 +1,6 @@
+import { focusManager } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { AppState, Platform } from 'react-native';
-import { focusManager } from '@tanstack/react-query';
 
 export const useReactQueryFocusManager = () => {
   useEffect(() => {
