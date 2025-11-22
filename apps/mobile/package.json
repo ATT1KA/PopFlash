@@ -12,10 +12,10 @@
     "lint": "eslint --ext .ts,.tsx ."
   },
   "dependencies": {
+    "@expo/vector-icons": "^14.0.2",
     "@popflash/shared": "file:../../packages/shared",
     "@tanstack/react-query": "5.56.2",
-    "@expo/vector-icons": "^14.0.2",
-    "expo": "^51.0.21",
+    "expo": "54.0.25",
     "expo-constants": "^16.0.2",
     "expo-linear-gradient": "^13.0.2",
     "expo-router": "^3.5.17",
