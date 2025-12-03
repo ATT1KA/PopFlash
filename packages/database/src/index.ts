@@ -10,3 +10,4 @@ export * from './models/audit-event.js';
 export * from './models/compliance-requirement.js';
 export * from './models/compliance-verification.js';
 export * from './models/financial-compliance-status.js';
+export * from './models/payment.js';

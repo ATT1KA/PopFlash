@@ -1,0 +1,64 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches: [staging]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Deploy services to ECS
+        run: |
+          # Update ECS services to use latest images
+          SERVICES=("api-gateway" "auth" "trading" "escrow" "insights" "compliance")
+          
+          for SERVICE in "${SERVICES[@]}"; do
+            echo "Updating $SERVICE service..."
+            aws ecs update-service \
+              --cluster popflash-staging \
+              --service popflash-$SERVICE \
+              --force-new-deployment \
+              --no-cli-pager
+          done
+
+      - name: Wait for deployments
+        run: |
+          SERVICES=("api-gateway" "auth" "trading" "escrow" "insights" "compliance")
+          
+          for SERVICE in "${SERVICES[@]}"; do
+            echo "Waiting for $SERVICE to stabilize..."
+            aws ecs wait services-stable \
+              --cluster popflash-staging \
+              --services popflash-$SERVICE
+          done
+
+      - name: Notify deployment status
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "Staging deployment successful"
+          else
+            echo "Staging deployment failed"
+            exit 1
+          fi

@@ -8,6 +8,7 @@ import morgan from 'morgan';
 import { env } from './config/env.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { authRouter } from './routes/auth.js';
+import { kycRouter } from './routes/kyc.js';
 
 export const createServer = async () => {
   await connectMongo(env.mongoUri);
@@ -33,7 +34,13 @@ export const createServer = async () => {
       credentials: true,
     }),
   );
-  app.use(json());
+  // Skip JSON parsing for webhook routes that need raw body
+  app.use((req, res, next) => {
+    if (req.path.includes('/webhooks/')) {
+      return next();
+    }
+    return json()(req, res, next);
+  });
   app.use(morgan('combined'));
   app.use(
     expressRateLimit({
@@ -44,11 +51,16 @@ export const createServer = async () => {
     }),
   );
 
-  app.get('/healthz', (_req, res) => {
-    res.json({ status: 'ok', service: 'auth', timestamp: new Date().toISOString() });
+  app.get('/health', (_req, res) => {
+    res.json({ status: 'healthy', service: 'auth', timestamp: new Date().toISOString() });
+  });
+
+  app.get('/ready', (_req, res) => {
+    res.json({ status: 'ready', service: 'auth', timestamp: new Date().toISOString() });
   });
 
   app.use('/v1/auth', authRouter);
+  app.use('/v1/kyc', kycRouter);
   app.use(errorHandler);
 
   return app;

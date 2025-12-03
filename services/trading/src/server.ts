@@ -27,8 +27,12 @@ export const createServer = async () => {
     }),
   );
 
-  app.get('/healthz', (_req, res) => {
-    res.json({ status: 'ok', service: 'trading', timestamp: new Date().toISOString() });
+  app.get('/health', (_req, res) => {
+    res.json({ status: 'healthy', service: 'trading', timestamp: new Date().toISOString() });
+  });
+
+  app.get('/ready', (_req, res) => {
+    res.json({ status: 'ready', service: 'trading', timestamp: new Date().toISOString() });
   });
 
   registerRoutes(app);

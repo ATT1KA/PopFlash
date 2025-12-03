@@ -1,0 +1,147 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: popflash-mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: mongosh --eval 'db.runCommand("ping").ok' --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: services/api-gateway/Dockerfile
+    container_name: popflash-api-gateway
+    ports:
+      - '4000:4000'
+    environment:
+      - API_GATEWAY_PORT=4000
+      - AUTH_SERVICE_URL=http://auth:4100
+      - TRADING_SERVICE_URL=http://trading:4200
+      - ESCROW_SERVICE_URL=http://escrow:4300
+      - INSIGHTS_SERVICE_URL=http://insights:4400
+      - COMPLIANCE_SERVICE_URL=http://compliance:4500
+      - CORS_ORIGINS=http://localhost:3000
+    depends_on:
+      - auth
+      - trading
+      - escrow
+      - insights
+      - compliance
+
+  auth:
+    build:
+      context: .
+      dockerfile: services/auth/Dockerfile
+    container_name: popflash-auth
+    ports:
+      - '4100:4100'
+    environment:
+      - AUTH_SERVICE_PORT=4100
+      - POPFLASH_MONGO_URI=mongodb://mongodb:27017/popflash
+      - POPFLASH_JWT_SECRET=${POPFLASH_JWT_SECRET}
+      - POPFLASH_JWT_REFRESH_SECRET=${POPFLASH_JWT_REFRESH_SECRET}
+      - POPFLASH_STEAM_API_KEY=${POPFLASH_STEAM_API_KEY}
+      - POPFLASH_STEAM_APP_ID=${POPFLASH_STEAM_APP_ID:-730}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  trading:
+    build:
+      context: .
+      dockerfile: services/trading/Dockerfile
+    container_name: popflash-trading
+    ports:
+      - '4200:4200'
+    environment:
+      - TRADING_SERVICE_PORT=4200
+      - POPFLASH_MONGO_URI=mongodb://mongodb:27017/popflash
+      - POPFLASH_STEAM_API_KEY=${POPFLASH_STEAM_API_KEY}
+      - POPFLASH_STEAM_APP_ID=${POPFLASH_STEAM_APP_ID:-730}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  escrow:
+    build:
+      context: .
+      dockerfile: services/escrow/Dockerfile
+    container_name: popflash-escrow
+    ports:
+      - '4300:4300'
+    environment:
+      - ESCROW_SERVICE_PORT=4300
+      - POPFLASH_MONGO_URI=mongodb://mongodb:27017/popflash
+      - COMPLIANCE_SERVICE_URL=http://compliance:4500
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      compliance:
+        condition: service_started
+
+  insights:
+    build:
+      context: .
+      dockerfile: services/insights/Dockerfile
+    container_name: popflash-insights
+    ports:
+      - '4400:4400'
+    environment:
+      - INSIGHTS_SERVICE_PORT=4400
+      - POPFLASH_MONGO_URI=mongodb://mongodb:27017/popflash
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  compliance:
+    build:
+      context: .
+      dockerfile: services/compliance/Dockerfile
+    container_name: popflash-compliance
+    ports:
+      - '4500:4500'
+    environment:
+      - COMPLIANCE_SERVICE_PORT=4500
+      - POPFLASH_MONGO_URI=mongodb://mongodb:27017/popflash
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  payments:
+    build:
+      context: .
+      dockerfile: services/payments/Dockerfile
+    container_name: popflash-payments
+    ports:
+      - '4600:4600'
+    environment:
+      - PAYMENTS_SERVICE_PORT=4600
+      - POPFLASH_MONGO_URI=mongodb://mongodb:27017/popflash
+      - POPFLASH_STRIPE_SECRET_KEY=${POPFLASH_STRIPE_SECRET_KEY}
+      - POPFLASH_STRIPE_WEBHOOK_SECRET=${POPFLASH_STRIPE_WEBHOOK_SECRET}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: popflash-web
+    ports:
+      - '3000:3000'
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:4000
+    depends_on:
+      - api-gateway
+
+volumes:
+  mongodb_data:

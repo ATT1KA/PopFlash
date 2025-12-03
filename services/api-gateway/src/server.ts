@@ -37,8 +37,12 @@ export const createServer = () => {
     }),
   );
 
-  app.get('/healthz', (_req: Request, res: Response) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  app.get('/health', (_req: Request, res: Response) => {
+    res.json({ status: 'healthy', service: 'api-gateway', timestamp: new Date().toISOString() });
+  });
+
+  app.get('/ready', (_req: Request, res: Response) => {
+    res.json({ status: 'ready', service: 'api-gateway', timestamp: new Date().toISOString() });
   });
 
   registerRoutes(app);

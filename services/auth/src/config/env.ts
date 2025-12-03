@@ -12,6 +12,9 @@ const envSchema = z.object({
   POPFLASH_STEAM_APP_ID: z.string().min(2),
   POPFLASH_STEAM_APP_NAME: z.string().default('CSVault'),
   POPFLASH_DEFAULT_COUNTRY_CODE: z.string().length(2).default('US'),
+  POPFLASH_PERSONA_API_KEY: z.string().optional(),
+  POPFLASH_PERSONA_TEMPLATE_ID: z.string().optional(),
+  POPFLASH_PERSONA_WEBHOOK_SECRET: z.string().optional(),
 });
 
 const rawEnv = envSchema.safeParse(process.env);
@@ -31,4 +34,7 @@ export const env = {
   steamAppId: rawEnv.data.POPFLASH_STEAM_APP_ID,
   steamAppName: rawEnv.data.POPFLASH_STEAM_APP_NAME,
   defaultCountryCode: rawEnv.data.POPFLASH_DEFAULT_COUNTRY_CODE,
+  personaApiKey: rawEnv.data.POPFLASH_PERSONA_API_KEY,
+  personaTemplateId: rawEnv.data.POPFLASH_PERSONA_TEMPLATE_ID,
+  personaWebhookSecret: rawEnv.data.POPFLASH_PERSONA_WEBHOOK_SECRET,
 } as const;

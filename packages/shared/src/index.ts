@@ -36,4 +36,5 @@ export type {
 export * from './schemas/trade';
 export * from './schemas/insight';
 export * from './schemas/escrow';
+export * from './schemas/payment';
 export * from './utils/environment';

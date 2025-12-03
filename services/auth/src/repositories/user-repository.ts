@@ -13,7 +13,9 @@ export const findUserBySteamId = (steamId: string) => UserModel.findOne({ steamI
 
 type UserRecord = Omit<User, 'id'> & { _id: string; id?: string };
 
-const mapToDomain = (doc: UserRecord): User =>
+type UserRecordWithPersona = UserRecord & { personaInquiryId?: string };
+
+const mapToDomain = (doc: UserRecordWithPersona): User =>
   userSchema.parse({
     id: doc._id.toString(),
     steamId: doc.steamId,
@@ -22,6 +24,7 @@ const mapToDomain = (doc: UserRecord): User =>
     avatarUrl: doc.avatarUrl ?? undefined,
     role: doc.role,
     kycStatus: doc.kycStatus,
+    personaInquiryId: doc.personaInquiryId ?? undefined,
     countryCode: doc.countryCode,
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
@@ -53,6 +56,26 @@ export const upsertUserBySteamId = async (input: UpsertUserInput): Promise<User>
 
 export const findUserById = async (id: string): Promise<User | null> => {
   const doc = await UserModel.findById(id).exec();
+
+  return doc ? mapToDomain(doc) : null;
+};
+
+export const updateUserKycStatus = async (
+  userId: string,
+  kycStatus: 'unverified' | 'pending' | 'verified' | 'rejected',
+  personaInquiryId?: string
+): Promise<User | null> => {
+  const updateFields: Record<string, unknown> = { kycStatus };
+
+  if (personaInquiryId) {
+    updateFields.personaInquiryId = personaInquiryId;
+  }
+
+  const doc = await UserModel.findByIdAndUpdate(
+    userId,
+    { $set: updateFields },
+    { new: true, lean: true }
+  ).exec();
 
   return doc ? mapToDomain(doc) : null;
 };

@@ -18,6 +18,7 @@ export const userSchema = z.object({
   avatarUrl: z.string().url().optional(),
   role: userRoleSchema,
   kycStatus: kycStatusSchema.default('unverified'),
+  personaInquiryId: z.string().optional(),
   countryCode: z.string().length(2),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),

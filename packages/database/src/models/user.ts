@@ -22,6 +22,7 @@ const userSchema = new Schema<UserEntity>(
       enum: ['unverified', 'pending', 'verified', 'enhanced', 'rejected'],
       default: 'unverified',
     },
+    personaInquiryId: { type: String, index: true, sparse: true },
     countryCode: { type: String, required: true },
   },
   {
